@@ -1,0 +1,327 @@
+{
+  "name": "contextkit-engineering-fixture-v1",
+  "documents": [
+    {
+      "id": "db",
+      "text": "The Aurora database connection pool became exhausted when Lambda concurrency increased, causing SQL timeouts.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "queues",
+      "text": "SQS dead letter queue receives messages after repeated consumer processing failures and retry exhaustion.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "deploy",
+      "text": "A deployment was rolled back after a release introduced an unexpected regression in the API gateway.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "auth",
+      "text": "Cognito identity tokens failed validation because the signing key identifier was no longer current.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "iam",
+      "text": "AWS IAM role policy does not allow reading the S3 bucket used for uploads.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "storage",
+      "text": "An S3 lifecycle rule automatically deletes archived objects after their retention period.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "frontend",
+      "text": "A React dashboard failed to render a graph after an incompatible component update.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "geo",
+      "text": "GeoJSON polygons need reprojection before overlaying local coordinate datasets on a map.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "cache",
+      "text": "Redis cache entries expired and increased database query load during peak traffic.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "observability",
+      "text": "Sentry error traces link frontend exceptions with releases and stack frames.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "testing",
+      "text": "GitHub Actions workflow runs automated TypeScript tests before merging a pull request.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "security",
+      "text": "Prompt injection in retrieved documents attempted to override the agent system policy.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "search",
+      "text": "Hybrid retrieval combines full text search with vector similarity and reranks documents.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "memory",
+      "text": "Agent memory consolidation summarizes prior verified decisions between sessions.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "cost",
+      "text": "Embedding API tokens and repeated uncached prompts increased the cost of model inference.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "network",
+      "text": "A private subnet without a NAT gateway cannot access public external endpoints.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "reports",
+      "text": "Meeting notes capture action owners, due dates and unresolved questions for later follow-up.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "field",
+      "text": "Civil engineering site visit observations record soil movement, instrumentation and inspection dates.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "water",
+      "text": "Stormwater drainage capacity models estimate peak flow during severe rainfall events.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    },
+    {
+      "id": "billing",
+      "text": "A payment charge succeeded but the invoice receipt was not generated.",
+      "source": "authored-fixture",
+      "tenantId": "engineering",
+      "updatedAt": "2026-11-14",
+      "authority": 0.8
+    }
+  ],
+  "cases": [
+    {
+      "id": "q01",
+      "query": "Why is the SQL service refusing new connections?",
+      "relevantIds": [
+        "db"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q02",
+      "query": "Where do poison queue messages end up after retries?",
+      "relevantIds": [
+        "queues"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q03",
+      "query": "How can we undo a faulty application rollout?",
+      "relevantIds": [
+        "deploy"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q04",
+      "query": "Why are sign-in JWT signatures rejected?",
+      "relevantIds": [
+        "auth"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q05",
+      "query": "The upload service is getting access denied on object storage",
+      "relevantIds": [
+        "iam"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q06",
+      "query": "Why are old backup files disappearing automatically?",
+      "relevantIds": [
+        "storage"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q07",
+      "query": "The chart component stopped drawing after an upgrade",
+      "relevantIds": [
+        "frontend"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q08",
+      "query": "Why do my map boundaries not line up with the basemap?",
+      "relevantIds": [
+        "geo"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q09",
+      "query": "Traffic spikes after in-memory keys time out",
+      "relevantIds": [
+        "cache"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q10",
+      "query": "Find the browser exception stack trace tied to a release",
+      "relevantIds": [
+        "observability"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q11",
+      "query": "How can we automate checks on every code change?",
+      "relevantIds": [
+        "testing"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q12",
+      "query": "A document tells our assistant to ignore its rules",
+      "relevantIds": [
+        "security"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q13",
+      "query": "How do we combine lexical and semantic document search?",
+      "relevantIds": [
+        "search"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q14",
+      "query": "How does an assistant remember verified choices next week?",
+      "relevantIds": [
+        "memory"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q15",
+      "query": "Why is recurring LLM usage getting expensive?",
+      "relevantIds": [
+        "cost"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q16",
+      "query": "Why can a cloud function not reach the internet from its VPC?",
+      "relevantIds": [
+        "network"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q17",
+      "query": "Who owns the action items from the meeting?",
+      "relevantIds": [
+        "reports"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q18",
+      "query": "Where are site inspection readings and ground movement observations?",
+      "relevantIds": [
+        "field"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q19",
+      "query": "Estimate runoff flow during a major downpour",
+      "relevantIds": [
+        "water"
+      ],
+      "tenantId": "engineering"
+    },
+    {
+      "id": "q20",
+      "query": "Customer was charged but no proof of payment arrived",
+      "relevantIds": [
+        "billing"
+      ],
+      "tenantId": "engineering"
+    }
+  ]
+}

@@ -5,3 +5,4 @@ export type { Embedder, SemanticRequest } from './semantic.js';
 export { openAICompatibleEmbedder } from './embeddings.js';
 export { cachedEmbedder, scoreRanking, validateDataset, evaluateDataset } from './evaluation.js';
 export type { EvaluationDataset, EvaluationCase, EvaluationRow } from './evaluation.js';
+export { ollamaEmbedder } from './ollama.js';

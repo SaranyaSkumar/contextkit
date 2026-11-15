@@ -104,6 +104,21 @@ Task + authorized candidate documents
 
 MIT
 
+## Free, fully local semantic evaluation (recommended)
+
+**No paid API, API key or subscription required.** Install [Ollama](https://ollama.com/download) on your machine, then download a local open-weight embedding model (one-time download, around 274 MB):
+
+```bash
+ollama pull nomic-embed-text
+# Keep Ollama running (use `ollama serve` if your installation does not start the service automatically)
+npm install
+npm run evaluate:local
+```
+
+The runner connects only to `http://127.0.0.1:11434/api/embed` by default. It compares lexical, semantic and hybrid methods on the existing labelled dataset. You can write a report with `EVALUATION_OUTPUT=local-results.json npm run evaluate:local`. If needed, specify `OLLAMA_EMBEDDING_MODEL` and `OLLAMA_BASE_URL`.
+
+Ollama processes embeddings locally after the initial model download. No ongoing paid API use; resource costs are your computer's disk, CPU/RAM and electricity. The benchmark cannot run until Ollama and the model are installed locally. GitHub-hosted CI does **not** download the model, and therefore does not claim a local embedding benchmark result. The earlier `npm run evaluate:real` command remains an **optional** external-API integration, never required.
+
 ## Labelled retrieval evaluation (v0.3)
 
 The `datasets/engineering.json` fixture includes **20 hand-authored, synthetic engineering documents and 20 labelled queries**. Topics include AWS, Lambda, SQS, GIS, RAG, security, agent memory and field reports. The labels are illustrative and have **not** been independently verified against real production documents.

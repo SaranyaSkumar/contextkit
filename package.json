@@ -1,6 +1,6 @@
 {
   "name": "@saranyaskumar/contextkit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A lightweight, provider-independent context selection toolkit for AI agents",
   "type": "module",
   "private": true,
@@ -12,7 +12,9 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "demo": "tsx src/demo.ts",
     "benchmark": "npm run build && node dist/benchmark.js",
-    "check": "npm run build && npm test"
+    "check": "npm run build && npm test",
+    "evaluate:lexical": "npm run build && node dist/evaluate-lexical.js",
+    "evaluate:real": "npm run build && node dist/evaluate-real.js"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

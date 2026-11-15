@@ -4,6 +4,14 @@ Lightweight, provider-independent TypeScript context engineering for AI agents.
 
 > **v0.3 experimental:** not a complete authorization, prompt-injection prevention, or production vector-search system.
 
+## Live interactive playground
+
+**[Try ContextKit in the browser](https://buildwithsaranya-saranyaskumars-projects.vercel.app/projects/contextkit)**
+
+The portfolio playground uses a small example corpus and supports instant keyword matching plus optional real on-device transformer embeddings. Visitors can change queries, tune the evidence budget, inspect ranked sources, and see which evidence is selected. No login or paid API key is needed.
+
+The playground is an educational implementation of the ContextKit retrieval concepts, not a service that clones and executes arbitrary repositories. The full open-source library, local Ollama benchmark, and 20-case engineering dataset remain in this repository.
+
 ## Features
 
 - Original lexical selector with trusted authority/freshness weighting

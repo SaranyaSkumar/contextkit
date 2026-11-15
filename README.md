@@ -1,20 +1,20 @@
 # ContextKit
 
-A lightweight, provider-independent TypeScript proof of concept for context engineering in AI agents. Select task-relevant evidence within a token budget while keeping source provenance and recording exclusions.
+Lightweight, provider-independent TypeScript context engineering for AI agents.
 
-> **Status:** v0.1 experimental. This is not a complete authorization, prompt-injection prevention or production retrieval system.
+> **v0.2 experimental:** not a complete authorization, prompt-injection prevention, or production vector-search system.
 
 ## Features
 
-- Deterministic relevance scoring: lexical overlap, trusted authority and freshness
-- Explicit tenant filtering before ranking
-- Configurable evidence token budget and tokenizer hook
-- Normalized text deduplication
-- Evidence provenance and exclusion reasons
-- No API key, database or LLM dependency
-- Automated tests and GitHub Actions CI
+- Original lexical selector with trusted authority/freshness weighting
+- Optional semantic or hybrid relevance via an injected `Embedder`
+- Optional OpenAI-compatible embeddings HTTP adapter, without SDK dependency
+- Tenant filtering **before** invoking an external embedding API
+- Deterministic deduplication, token budgets, source provenance, and exclusion reasons
+- Reproducible synthetic lexical-versus-semantic retrieval benchmark
+- Tests and GitHub Actions CI
 
-## Quick start
+## Run
 
 Requires Node.js 22+.
 
@@ -22,57 +22,83 @@ Requires Node.js 22+.
 npm install
 npm run check
 npm run demo
+npm run benchmark
 ```
 
-## Example
+The existing lexical `buildContext` requires **no API key**. The semantic selector takes any adapter implementing `embed(texts): Promise<number[][]>`.
+
+## Semantic selection
 
 ```ts
-import { buildContext, renderContext } from './src/index.js';
-const result = buildContext({
-  task: 'Investigate Lambda database timeout',
+import { buildSemanticContext, openAICompatibleEmbedder } from './src/index.js';
+
+const embedder = openAICompatibleEmbedder({
+  apiKey: process.env.OPENAI_API_KEY!,
+  model: 'text-embedding-3-small'
+});
+const result = await buildSemanticContext({
+  task: 'Investigate SQL connection exhaustion',
   tenantId: 'engineering',
-  budgetTokens: 200,
+  budgetTokens: 1000,
   documents: [{
     id: 'log-1',
     source: 'cloudwatch',
+    text: 'Aurora database connections exhausted',
     tenantId: 'engineering',
     updatedAt: '2026-11-14',
-    authority: 0.9,
-    text: 'Lambda encountered an Aurora database timeout'
-  }]
+    authority: 0.9
+  }],
+  embedder
 });
-console.log(renderContext(result.selected));
+console.log(result.selected, result.excluded);
 ```
 
-## How it works
+You can replace the adapter with a local embeddings provider, such as an Ollama-compatible endpoint, or a Qdrant/pgvector retrieval adapter in a future version. The default endpoint is OpenAI-compatible; pass `baseUrl` when using another compatible service.
 
-1. Reject unauthorized tenants and malformed metadata.
-2. Compute lexical relevance, document authority and freshness.
-3. Sort deterministically by score and ID.
-4. Remove duplicate text and select whole documents within the budget.
-5. Return selected evidence, estimated token cost, and exclusion reasons.
+## Benchmark
 
-## Constraints and safety
+`npm run benchmark` compares the original lexical selector with semantic scoring using **five synthetic, synonym-based tasks**. The benchmark uses a **handcrafted concept-vector embedder**, not a real model. It validates metric and ranking plumbing but **cannot establish real-world embedding effectiveness**.
 
-- **Not a security boundary:** tenant filtering demonstrates one check, but production systems MUST enforce user/document ACLs at the source and on retrieval.
-- **Untrusted content:** rendered evidence is data, never instructions. Delimiters do not mitigate prompt injection on their own.
-- **Approximate tokens:** 4 characters per token is only a heuristic. Pass a model-specific `estimateTokens` function and reserve tokens for system prompts, conversation, tool schemas and output.
-- **Metadata integrity:** `authority`, source identity and timestamps must come from trusted ingestion systems.
-- **Relevance limitations:** keyword overlap misses synonyms. Ranking is not calibrated, and freshness can favor irrelevant new documents. The selector also works on whole documents only.
-- **No persistence:** the initial release does not implement embeddings, memory, compaction, or integrations.
+Metrics currently include mean evidence recall and precision. Future validation should include held-out human-labelled queries, meaningful Recall@K, downstream answer accuracy, end-to-end latency, model cost, and access-control violations. Compare both approaches at the same evidence token budget.
 
-## Evaluation plan
+## Architecture
 
-Create 20-30 labeled tasks with known relevant evidence. Compare: all authorized documents, keyword top-K, and ContextKit. Record evidence Recall@K, precision, downstream grounded-answer correctness, prompt tokens, latency and security-policy violations. A smaller prompt is only an improvement if task quality is maintained or improved.
+```text
+Task + authorized candidate documents
+               |
+    Tenant/metadata filtering
+               |
+    Query and document embeddings
+               |
+    Cosine similarity + lexical overlap
+               |
+    Relevance threshold + deduplication
+               |
+    Evidence budget + exclusion reasons
+               |
+    Selected context with provenance
+```
+
+## Security and limitations
+
+- **Tenant checking is illustrative, not sufficient authorization.** Enforce user- and document-level ACLs at the data source **before retrieval and external embeddings**.
+- Document text must be treated as untrusted. Source delimiters are not prompt-injection protection.
+- Authority and timestamps must originate in trusted ingestion systems.
+- The prototype embeds all authorized candidate texts per request. Cache embeddings or use a vector index for scale.
+- Cosine scores are not calibrated probabilities. Tune thresholds with labelled data.
+- Approximate token counts only cover evidence, not instructions, message history or output.
+- Avoid sending confidential evidence to external providers without organizational approval.
+- Failures from the embedding provider are surfaced; production clients need retry, timeout and backoff policies.
 
 ## Roadmap
 
-- [ ] Chunk-level selection and semantic retrieval adapters
-- [ ] Model-specific token counting and total prompt budgeting
-- [ ] Reranking with citations
-- [ ] Session compaction and persistent memory adapters
-- [ ] MCP adapters and per-user/document access control
-- [ ] Benchmark dataset and CI evaluation gates
+- [x] Optional semantic/hybrid retrieval
+- [x] Deterministic retrieval benchmark fixture
+- [ ] Real embedding evaluation dataset and automated regression thresholds
+- [ ] Persistent vector index, caching and chunking
+- [ ] Source-side document permissions and per-user ACL adapters
+- [ ] Session compaction and persistent memory
+- [ ] MCP integration and grounding evaluation
 
 ## License
 

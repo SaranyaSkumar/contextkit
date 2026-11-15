@@ -2,7 +2,7 @@
 
 Lightweight, provider-independent TypeScript context engineering for AI agents.
 
-> **v0.2 experimental:** not a complete authorization, prompt-injection prevention, or production vector-search system.
+> **v0.3 experimental:** not a complete authorization, prompt-injection prevention, or production vector-search system.
 
 ## Features
 
@@ -103,3 +103,28 @@ Task + authorized candidate documents
 ## License
 
 MIT
+
+## Labelled retrieval evaluation (v0.3)
+
+The `datasets/engineering.json` fixture includes **20 hand-authored, synthetic engineering documents and 20 labelled queries**. Topics include AWS, Lambda, SQS, GIS, RAG, security, agent memory and field reports. The labels are illustrative and have **not** been independently verified against real production documents.
+
+First run the credential-free lexical baseline:
+
+```bash
+npm run evaluate:lexical
+```
+
+Then compare it with a **real embedding model** (API use may incur charges):
+
+```bash
+export EMBEDDING_API_KEY='YOUR_API_KEY'
+export EMBEDDING_MODEL='text-embedding-3-small'
+# Optional: EMBEDDING_BASE_URL for OpenAI-compatible services
+EVALUATION_OUTPUT=results.json npm run evaluate:real
+```
+
+The runner compares lexical, semantic-only and hybrid ranking on the **same authorized corpus, queries and evidence budget** and reports Recall@3, Precision@3, MRR@3 and mean end-to-end per-query latency. It caches identical embeddings across cases and approaches in a single run; latency is therefore sensitive to warm-cache order. Results are not meaningful for provider comparison without repeating runs with controlled caching and network conditions.
+
+There is deliberately **no API key in the repository or GitHub Actions**, and the real-model runner fails explicitly when credentials are missing. CI runs the lexical fixture and unit tests only, never silently claims a real-model evaluation.
+
+Limitations: 20 authored queries are suitable for integration testing, not production statistical claims. Before making adoption decisions, collect permission-cleared real engineering queries, label relevant document versions with domain experts, include hard negative examples, compare multiple seeds or samples, and record recall, end-task correctness, p95 latency, token usage and actual API billing. Never commit API keys or confidential business documents.
